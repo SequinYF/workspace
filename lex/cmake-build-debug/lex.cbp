@@ -82,6 +82,9 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/Users/sequin_yf/CLionProjects/lex/lex.h">
+			<Option target="lex"/>
+		</Unit>
 		<Unit filename="/Users/sequin_yf/CLionProjects/lex/main.cpp">
 			<Option target="lex"/>
 		</Unit>

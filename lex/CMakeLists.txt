@@ -3,5 +3,5 @@ project(lex)
 
 set(CMAKE_CXX_STANDARD 11)
 
-set(SOURCE_FILES main.cpp)
+set(SOURCE_FILES main.cpp lex.h)
 add_executable(lex ${SOURCE_FILES})

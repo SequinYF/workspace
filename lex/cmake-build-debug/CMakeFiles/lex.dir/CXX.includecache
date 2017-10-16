@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/Users/sequin_yf/CLionProjects/lex/main.cpp
+/Users/sequin_yf/CLionProjects/lex/lex.h
 iostream
 -
 map
@@ -15,4 +15,8 @@ vector
 -
 fstream
 -
+
+/Users/sequin_yf/CLionProjects/lex/main.cpp
+lex.h
+/Users/sequin_yf/CLionProjects/lex/lex.h
 

@@ -1,63 +1,38 @@
-#include <iostream>
-#include <map>
-#include <vector>
-#include <fstream>
-#define filePath "/Users/sequin_yf/Desktop/source.txt"
-using namespace std;
-
-//file infomation
-struct {
-    long len;
-}fNode;
-
-//pretreatment source
-vector <string> source, vfile;
-vector<string>::iterator iter;
-//key value list
-map <string, int> list;
-//file buf;
-string buf;
-const char* cStr = buf.c_str();
+#include "lex.h"
 
 
 void getSource() {
 
     ifstream file;
-    cout << "1" << endl;
     try {
         //open
         file.open(filePath);
-
         //size
-        file.seekg(0, ios_base::end);
-        streampos fileSzie = file.tellg();
-        fNode.len = fileSzie;
+//        file.seekg(0, ios_base::end);
+//        streampos fileSzie = file.tellg();
         file.seekg(0, ios_base::beg);
-
         //copy
         while(getline(file, buf)) {
             vfile.push_back(buf);
-           // cout << buf << endl;
         }
     }catch(const int err) {
         cout << "err" << endl;
         //error
     }
-
     file.close();
 }
 
 void pretreatment() {
     string str;
     for(iter = vfile.begin(); iter != vfile.end(); iter++) {
-        string temp;
+        char temp[40];
+        string word;
         buf = *iter;
-        // cout << buf << endl;
         int pos = 0, i = 0;
+
         //whitespace
         while (buf[i] == ' ') i++;
         while (i < buf.length()) {
-
             //note
             if (buf[i] == '/' && buf[i + 1] == '*') {
                 i += 2;
@@ -67,28 +42,50 @@ void pretreatment() {
                 i++;
             }
             //push
-            if (buf[i] == ' ' || buf[i] == '\n' || buf[i] == '\r') {
-                cout << temp << endl;
-                source.push_back(temp);
+            if (buf[i] == ' ') {
+                temp[pos] = '\0';
+                word = temp;
+                source.push_back(word);
                 pos = 0;
             }
             //whitespace in case
             while (buf[i] == ' ') i++;
             temp[pos] = buf[i++];
-            cout << temp[pos] << endl;
             pos++;
+
         }
         if(pos != 0) {
-            cout << temp << endl;
-            source.push_back(temp);
+            temp[pos] = '\0';
+            word = temp;
+            source.push_back(word);
         }
     }
 }
+bool isNum(string str) {
+    stringstream sin(str);
+    double d;
+    char c;
+    if(!(sin >> d)) return false;
+    if(sin >> c) return false;
+}
 
+void analyse() {
+    for(iter = source.begin(); iter != source.end(); iter++) {
+        string temp;
+        temp = *iter;
+        if(isNum(temp)) {
+           cout << "num" << endl;
+        }
+        else{
+            cout << list[temp] << endl;
+        }
+
+    }
+}
 int main() {
 
     getSource();
     pretreatment();
-
+    analyse();
     return 0;
 }
