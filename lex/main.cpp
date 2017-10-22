@@ -4,7 +4,6 @@ void getSource() {
 
     ifstream file;
     try {
-
         //open
         file.open(filePath);
 
@@ -21,7 +20,6 @@ void getSource() {
             vfile.push_back(buf);
         }
     }catch(const int err) {
-
         //error
         switch(err) {
             case EOVERFLOW:
@@ -157,7 +155,7 @@ void analyse() {
                     ans_c[index++] = temp[i];
                 }
             }
-            else{
+            if(!isalpha(temp[i]) && !isdigit(temp[i])){
                 if(flag != SYMBOL && flag != 0) {
                     ans_c[index] = '\0';
                     ans = ans_c;
@@ -168,7 +166,7 @@ void analyse() {
                 }
                 else{
                     flag = SYMBOL;
-                    ans_c[index++] = temp[i];
+                   ans_c[index++] = temp[i];
                 }
             }
 
@@ -176,6 +174,56 @@ void analyse() {
         ans_c[index] = '\0';
         ans = ans_c;
         ret.push(ans);
+    }
+}
+
+void symbol_judge(string str) {
+
+    for(int i = 0; i < str.length(); i++) {
+        if(str[i] == '+' || str[i] == '-' || str[i] == '*' \
+ || str[i] == '/' || str[i] == '!' || str[i] == '=') {
+            if(str[i+1] == '=' ) {
+                cout << "SYMBOL: " << str << " -> " << str[i] << \
+                            str[i+1] << endl;
+                i += 2;
+            }
+        }
+        if(str[i] == '+' && str[i+1] == '+'){
+            char t[str.length()+1];
+            t[0] = str[i];
+            t[1] = str[i+1];
+            t[2] = '\0';
+            cout << "SYMBOL: " << str[i] << str[i+1]<< " -> " << list[t] << endl;
+            i += 2;
+        }
+        if(str[i] == '-' && str[i+1] == '-'){
+            char t[str.length()+1];
+            t[0] = str[i];
+            t[1] = str[i+1];
+            t[2] = '\0';
+            cout << "SYMBOL: " << str[i] << str[i+1] << " -> " << list[t] << endl;
+            i += 2;
+        }
+        if(str[i] == '<' && str[i+1] == '<'){
+            char t[str.length()+1];
+            t[0] = str[i];
+            t[1] = str[i+1];
+            t[2] = '\0';
+            cout << "SYMBOL: " << str[i] << str[i+1] << " -> " << list[t] << endl;
+            i += 2;
+        }
+        if(str[i] == '>' && str[i+1] == '>'){
+            char t[str.length()+1];
+            t[0] = str[i];
+            t[1] = str[i+1];
+            t[2] = '\0';
+            cout << "SYMBOL: " << str[i] << str[i+1] << " -> " << list[t] << endl;
+            i += 2;
+        }
+        char t[str.length()+1];
+        t[0] = str[i];
+        t[2] = '\0';
+        cout << "SYMBOL: " << str[i] << " -> " << list[t] << endl;
     }
 }
 
@@ -198,7 +246,11 @@ void judge() {
             }
         }
         else {
-            cout << "WORD: " << str << endl;
+            if(isalpha(str[0]))
+                cout << "WORD: " << str << endl;
+            else{
+               symbol_judge(str);
+            }
         }
     }
 

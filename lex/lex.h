@@ -42,5 +42,6 @@ void analyse();
 void judge();
 bool isNum(string str);
 bool isSymbol(char ch);
+void symbol_judge(string str);
 bool doList();
 #endif //LEX_LEX_H
