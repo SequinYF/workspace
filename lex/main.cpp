@@ -85,12 +85,15 @@ void pretreatment() {
 
 bool doList() {
 
+    // import match criteria
     fstream lfile;
     lfile.open(listPath);
     string str;
     int index = 0;
 
     try{
+
+        //number the key words and symbol
         while(getline(lfile, str)) {
             if(index < SYMBOL) {
                 list[str] = KEY + index;
@@ -119,67 +122,98 @@ bool isNum(string str) {
 
 
 void analyse() {
+
+    //for each string
     for(iter = source.begin(); iter != source.end(); iter++) {
         string temp = *iter;
+        //split result string
         string ans;
         int index = 0;
+        //define every char
         int flag = 0;
+        //for string into char[]
         char ans_c[temp.length()];
-        for(int i = 0; i < temp.length(); i++) {
-             if(isdigit(temp[i])){
-                if(flag != NUMBER && flag != 0) {
-                    ans_c[index] = '\0';
-                    ans = ans_c;
-                    ret.push(ans);
-                    flag = NUMBER;
-                    index = 0;
-                    ans_c[index++] = temp[i];
-                }
-                else{
-                    flag = NUMBER;
-                    ans_c[index++] = temp[i];
-                }
-            }
-            if(isalpha(temp[i])){
 
-                if(flag != KEY && flag != 0) {
+        //for each char
+        for(int i = 0; i < temp.length(); i++) {
+
+            //if a number
+             if(isdigit(temp[i])){
+                 //last char is not a number
+                if(flag != NUMBER && flag != 0) {
+                    //make the result string,
                     ans_c[index] = '\0';
                     ans = ans_c;
                     ret.push(ans);
+                    //change the flag type
+                    flag = NUMBER;
+                    //init index
+                    index = 0;
+                    //new result string
+                    ans_c[index++] = temp[i];
+                }
+                    //last char still a number
+                else{
+                    //append into result string
+                    flag = NUMBER;
+                    ans_c[index++] = temp[i];
+                }
+            }
+
+            //if a letter
+            if(isalpha(temp[i])){
+                //last char is not a letter
+                if(flag != KEY && flag != 0) {
+                    //make the result string
+                    ans_c[index] = '\0';
+                    ans = ans_c;
+                    ret.push(ans);
+                    //change flag type
                     flag = KEY;
+                    //init result string
                     index = 0;
                     ans_c[index++] = temp[i];
                 }
                 else{
+                    //append
                     flag = KEY;
                     ans_c[index++] = temp[i];
                 }
             }
+            //if a symbol
             if(!isalpha(temp[i]) && !isdigit(temp[i])){
+                //last char is not symbol
                 if(flag != SYMBOL && flag != 0) {
+                    //make the result string
                     ans_c[index] = '\0';
                     ans = ans_c;
                     ret.push(ans);
+                    //change flag type
                     flag = SYMBOL;
+                    //init result string
                     index = 0;
                     ans_c[index++] = temp[i];
                 }
                 else{
+                    //append
                     flag = SYMBOL;
                    ans_c[index++] = temp[i];
                 }
             }
 
         }
+        //the last result string
         ans_c[index] = '\0';
         ans = ans_c;
         ret.push(ans);
     }
 }
 
-void symbol_judge(string str) {
 
+void symbol_judge(string str) {
+    //for each symbol string
     for(int i = 0; i < str.length(); i++) {
+        //case of += -= *= /= != ==
         if(str[i] == '+' || str[i] == '-' || str[i] == '*' \
  || str[i] == '/' || str[i] == '!' || str[i] == '=') {
             if(str[i+1] == '=' ) {
@@ -188,6 +222,7 @@ void symbol_judge(string str) {
                 i += 2;
             }
         }
+        //case of ++
         if(str[i] == '+' && str[i+1] == '+'){
             char t[str.length()+1];
             t[0] = str[i];
@@ -196,6 +231,7 @@ void symbol_judge(string str) {
             cout << "SYMBOL: " << str[i] << str[i+1]<< " -> " << list[t] << endl;
             i += 2;
         }
+        //case of --
         if(str[i] == '-' && str[i+1] == '-'){
             char t[str.length()+1];
             t[0] = str[i];
@@ -204,6 +240,7 @@ void symbol_judge(string str) {
             cout << "SYMBOL: " << str[i] << str[i+1] << " -> " << list[t] << endl;
             i += 2;
         }
+        //case of <<
         if(str[i] == '<' && str[i+1] == '<'){
             char t[str.length()+1];
             t[0] = str[i];
@@ -212,6 +249,7 @@ void symbol_judge(string str) {
             cout << "SYMBOL: " << str[i] << str[i+1] << " -> " << list[t] << endl;
             i += 2;
         }
+        //case of >>
         if(str[i] == '>' && str[i+1] == '>'){
             char t[str.length()+1];
             t[0] = str[i];
@@ -220,6 +258,7 @@ void symbol_judge(string str) {
             cout << "SYMBOL: " << str[i] << str[i+1] << " -> " << list[t] << endl;
             i += 2;
         }
+        // case of single symbol
         char t[str.length()+1];
         t[0] = str[i];
         t[2] = '\0';
@@ -229,14 +268,17 @@ void symbol_judge(string str) {
 
 void judge() {
 
+    //for each result string
     while(!ret.empty()) {
         string str;
         str = ret.front();
-       // cout << str << endl;
         ret.pop();
+
+        //is number string
         if(isNum(str)) {
             cout << "NUMBER: " << str << endl;
         }
+            //can match ,is key word or symbol
         else if(list[str]){
             if(list[str] < SYMBOL) {
                 cout << "KEY: "<< str << " -> " <<  list[str] << endl;
@@ -245,9 +287,12 @@ void judge() {
                 cout << "SYMBOL: " << str << " -> " << list[str] << endl;
             }
         }
+            //cant match, is symbol or word
         else {
+            //word
             if(isalpha(str[0]))
                 cout << "WORD: " << str << endl;
+                //symbol
             else{
                symbol_judge(str);
             }
@@ -257,11 +302,10 @@ void judge() {
 }
 
 int main() {
-
-    doList();
-    getSource();
-    pretreatment();
-    analyse();
-    judge();
+    doList();   //key words and symbol match
+    getSource(); //open file
+    pretreatment(); //eliminate white space and notes ,pick up vaild strings
+    analyse(); //split each strings by num, symbol and alpha
+    judge(); //get results
     return 0;
 }
