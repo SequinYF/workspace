@@ -1,11 +1,11 @@
 #include "./lex.h"
 vector<string>::iterator iter;
-void getSource() {
+void getSource(string path) {
 
     ifstream file;
     try {
         //open
-        file.open(filePath);
+        file.open(path);
 
         //size
         file.seekg(0, ios_base::end);
@@ -258,12 +258,44 @@ void symbol_judge(string str) {
             cout << "SYMBOL: " << str[i] << str[i+1] << " -> " << list[t] << endl;
             i += 2;
         }
+        if(str[i] == ':' && str[i+1] == ':'){
+            char t[str.length()+1];
+            t[0] = str[i];
+            t[1] = str[i+1];
+            t[2] = '\0';
+            cout << "SYMBOL: " << str[i] << str[i+1] << " -> " << list[t] << endl;
+            i += 2;
+        }
         // case of single symbol
         char t[str.length()+1];
         t[0] = str[i];
-        t[2] = '\0';
-        cout << "SYMBOL: " << str[i] << " -> " << list[t] << endl;
+        t[1] = '\0';
+        if(list[t]){
+            cout << "SYMBOL: " << t << " -> " << list[t] << endl;
+        }
+        else{
+            cout << "WORD: " << str[i] << endl;
+        }
+
     }
+}
+
+int other = 0;
+string path;
+void define_func() {
+    string str;
+    str = ret.front();
+    cout << str << endl;
+    if(str[0] == '<'){
+        return;
+    }
+    ret.pop();
+    str = ret.front();
+    string path = "/Users/sequin_yf/CLionProjects/lex/";
+    path = path + str;
+    path = path + ".h";
+    cout << path << endl;
+    other++;
 }
 
 void judge() {
@@ -271,6 +303,7 @@ void judge() {
     //for each result string
     while(!ret.empty()) {
         string str;
+        //cout << str << endl;
         str = ret.front();
         ret.pop();
 
@@ -281,6 +314,11 @@ void judge() {
             //can match ,is key word or symbol
         else if(list[str]){
             if(list[str] < SYMBOL) {
+                //include
+//                if(str == "include"){
+//                    define_func();
+//                    if(other) continue;
+//                }
                 cout << "KEY: "<< str << " -> " <<  list[str] << endl;
             }
             else{
@@ -301,11 +339,24 @@ void judge() {
 
 }
 
-int main() {
+void func(string path){
+   //freopen("/Users/sequin_yf/Desktop/ans.txt", "w", stdout);
     doList();   //key words and symbol match
-    getSource(); //open file
+    getSource(filePath); //open file
     pretreatment(); //eliminate white space and notes ,pick up vaild strings
     analyse(); //split each strings by num, symbol and alpha
     judge(); //get results
+
+}
+
+int main() {
+  //  cout << "start" << endl;
+    func(filePath);
+//    cout << other << endl;
+//    while(other--) {
+//        cout << path << endl;
+//        //func(path);
+//    }
+    cout << "OVER" << endl;
     return 0;
 }

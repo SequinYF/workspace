@@ -15,7 +15,7 @@
 #define listPath "/Users/sequin_yf/Desktop/list.txt"
 #define KEY 1 //start from 1
 #define SAFE 10240
-#define SYMBOL 30 //start from 30
+#define SYMBOL 31 //start from 30
 #define NUMBER 2 //flag
 using namespace std;
 
@@ -32,11 +32,12 @@ string buf;
 
 
 bool doList();
-void getSource();
+void getSource(string path);
 void pretreatment();
 void analyse();
 void judge();
 bool isNum(string str);
 void symbol_judge(string str);
 bool doList();
+void func(string path);
 #endif //LEX_LEX_H
